@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS | Surveillance Command</title>
+    <!-- Tailwind CSS (Utility classes for speed) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plotly.js (For the Heatmap) -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-900 text-slate-50 font-mono h-screen flex flex-col overflow-hidden">
+
+    <!-- HEADER -->
+    <header class="border-b border-slate-700 bg-slate-950 p-4 flex justify-between items-center shadow-lg z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+            <h1 class="text-xl font-bold tracking-widest text-emerald-500">AEGIS <span class="text-slate-500">RADAR SYS v2.0</span></h1>
+        </div>
+        <div class="flex gap-4 text-xs text-slate-400">
+            <div>BAND: <span class="text-white">24GHz FMCW</span></div>
+            <div>STATUS: <span class="text-emerald-400">ONLINE</span></div>
+            <div>AI MODEL: <span class="text-white">RESNET-CNN</span></div>
+        </div>
+    </header>
+
+    <!-- MAIN GRID -->
+    <main class="flex-1 grid grid-cols-12 gap-0">
+        
+        <!-- LEFT: CONTROLS -->
+        <aside class="col-span-3 bg-slate-900 border-r border-slate-700 p-6 flex flex-col gap-6">
+            
+            <!-- Scenario Loader -->
+            <div class="panel">
+                <h2 class="panel-header">SCENARIO SIMULATION</h2>
+                <div class="flex flex-col gap-3 mt-4">
+                    <button onclick="loadScenario('drone')" class="btn-control hover:border-red-500 hover:text-red-400 group">
+                        <span class="group-hover:animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75 mr-2"></span>
+                        LOAD: DRONE INCURSION
+                    </button>
+                    <button onclick="loadScenario('human')" class="btn-control hover:border-blue-500 hover:text-blue-400">
+                        LOAD: HUMAN TRAFFIC
+                    </button>
+                    <button onclick="loadScenario('car')" class="btn-control hover:border-yellow-500 hover:text-yellow-400">
+                        LOAD: VEHICLE TRACKING
+                    </button>
+                <div class="border-t border-slate-700 my-3"></div> <!-- Separator Line -->
+                    <button onclick="loadRandom()" class="btn-control border-purple-500 text-purple-400 hover:bg-purple-900/20 group relative overflow-hidden">
+                <div class="absolute inset-0 bg-purple-500/10 animate-pulse"></div>
+                    <span class="relative font-bold">⚠️ INJECT UNKNOWN SIGNAL</span>
+                </button>
+                </div>
+                <div id="scenario-status" class="mt-4 text-xs text-slate-500 italic text-center">System Idle</div>
+            </div>
+
+            <!-- Radar Controls -->
+            <div class="panel flex-1">
+                <h2 class="panel-header">RADAR CONTROL</h2>
+                <div class="flex gap-2 mt-4">
+                    <button id="btn-start" onclick="toggleRadar(true)" class="bg-emerald-600 text-white p-3 w-full rounded hover:bg-emerald-500 font-bold disabled:opacity-50">
+                        INITIATE SCAN
+                    </button>
+                    <button id="btn-stop" onclick="toggleRadar(false)" class="bg-red-900/50 border border-red-800 text-red-400 p-3 w-full rounded hover:bg-red-900 font-bold disabled:opacity-50" disabled>
+                        HALT
+                    </button>
+                </div>
+                
+                <div class="mt-8">
+                    <div class="text-xs text-slate-500 mb-1">LATENCY</div>
+                    <div id="latency-val" class="text-2xl font-bold text-slate-300">-- ms</div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- CENTER: VISUALIZATION -->
+        <section class="col-span-6 bg-black relative flex flex-col">
+            <div class="absolute top-4 left-4 z-10 bg-black/50 p-2 rounded border border-slate-700 backdrop-blur">
+                <div class="text-xs text-slate-400">MICRO-DOPPLER SIGNATURE</div>
+            </div>
+            <!-- Plotly Chart Container -->
+            <div id="radar-heatmap" class="w-full h-full"></div>
+            
+            <!-- Overlay Grid -->
+            <div class="absolute inset-0 pointer-events-none radar-grid"></div>
+        </section>
+
+        <!-- RIGHT: ANALYSIS -->
+        <aside class="col-span-3 bg-slate-900 border-l border-slate-700 p-6 flex flex-col">
+            <h2 class="panel-header">TARGET CLASSIFICATION</h2>
+
+            <!-- Threat Box -->
+            <div id="threat-panel" class="mt-6 p-6 border-2 border-slate-700 rounded-lg text-center transition-all duration-300">
+                <div class="text-sm text-slate-400">DETECTED ENTITY</div>
+                <div id="target-label" class="text-4xl font-bold mt-2 text-slate-600">--</div>
+            </div>
+
+            <!-- Confidence -->
+            <div class="mt-8">
+                <div class="flex justify-between text-xs text-slate-400 mb-2">
+                    <span>CONFIDENCE SCORE</span>
+                    <span id="conf-val">0%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div id="conf-bar" class="h-full bg-slate-600 w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- Live Logs -->
+            <div class="flex-1 mt-8 flex flex-col overflow-hidden">
+                <h2 class="panel-header mb-2">EVENT LOGS</h2>
+                <div id="logs" class="flex-1 overflow-y-auto text-xs font-mono space-y-2 pr-2 text-slate-400">
+                    <!-- Logs inserted here by JS -->
+                </div>
+            </div>
+        </aside>
+
+    </main>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

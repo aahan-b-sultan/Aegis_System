@@ -1,0 +1,11 @@
+# --- IGNORE THESE ---
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+
+# --- ALLOW THESE ---
+# Since your data_lake is only 88MB total, we WILL upload it.
+# GitHub limit is 100MB per FILE, not per folder.
+# Unless you have a SINGLE CSV larger than 100MB, this is fine.

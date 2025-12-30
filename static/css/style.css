@@ -1,0 +1,33 @@
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+.panel-header {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: #64748b;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 0.5rem;
+}
+
+.btn-control {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    text-align: left;
+    transition: all 0.2s;
+    border-radius: 4px;
+    position: relative;
+}
+
+/* Radar Grid Overlay */
+.radar-grid {
+    background-image: 
+        linear-gradient(rgba(51, 65, 85, 0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(51, 65, 85, 0.3) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
