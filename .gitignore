@@ -4,6 +4,9 @@ __pycache__/
 *.pyc
 .DS_Store
 .vscode/
+*.db
+*.sqlite3
+*.pdf
 
 # --- ALLOW THESE ---
 # Since your data_lake is only 88MB total, we WILL upload it.

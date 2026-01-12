@@ -1,12 +1,23 @@
+/* CYBERPUNK PALETTE */
+:root {
+    --primary: #A163F7;   /* Purple */
+    --secondary: #6F88FC; /* Blue */
+    --safe: #45E3FF;      /* Cyan */
+    --threat: #FF7582;    /* Red/Pink */
+    
+    --bg-dark: #5196cb;
+    --panel-bg: #1e293b;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
 ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
 .panel-header {
     font-size: 0.75rem;
     letter-spacing: 0.1em;
-    color: #64748b;
+    color: #94a3b8; /* Muted text */
     border-bottom: 1px solid #334155;
     padding-bottom: 0.5rem;
 }
@@ -19,15 +30,24 @@
     color: #94a3b8;
     font-size: 0.8rem;
     text-align: left;
-    transition: all 0.2s;
+    transition: all 0.3s;
     border-radius: 4px;
     position: relative;
+    overflow: hidden;
+}
+
+/* Hover Effects using new Palette */
+.btn-control:hover {
+    border-color: var(--secondary);
+    color: var(--safe);
+    background: rgba(111, 136, 252, 0.1); /* Blue tint */
+    box-shadow: 0 0 10px rgba(111, 136, 252, 0.2);
 }
 
 /* Radar Grid Overlay */
 .radar-grid {
     background-image: 
-        linear-gradient(rgba(51, 65, 85, 0.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(51, 65, 85, 0.3) 1px, transparent 1px);
+        linear-gradient(rgba(69, 227, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(69, 227, 255, 0.1) 1px, transparent 1px);
     background-size: 50px 50px;
 }
