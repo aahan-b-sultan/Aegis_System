@@ -246,3 +246,13 @@ async function loadHistoryData() {
         tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-[#FF7582]">Connection Failed: ${e.message}</td></tr>`;
     }
 }
+
+// --- SECURITY LOGIC ---
+function logout() {
+    if(confirm("Confirm Session Termination?")) {
+        // 1. Destroy the token
+        localStorage.removeItem('aegis_token');
+        // 2. Redirect to secure gateway
+        window.location.href = '/login';
+    }
+}

@@ -3,7 +3,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from app.core.config import settings
-from app.api.endpoints import radar
+from app.models.user import User
+from app.api.endpoints import radar, auth
+from app.models.scan import ScanLog
 
 # --- DATABASE IMPORTS ---
 from app.db.session import engine
@@ -21,10 +23,16 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 app.include_router(radar.router, prefix="/api/v1/radar", tags=["Radar Control"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
+app.include_router(radar.router, prefix="/api/v1/radar", tags=["Radar Control"])
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
 if __name__ == "__main__":
     import uvicorn

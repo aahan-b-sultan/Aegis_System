@@ -1,0 +1,20 @@
+# Ignore the virtual environment (The container builds its own)
+venv/
+env/
+
+# Ignore local database (Start fresh inside container)
+*.db
+*.sqlite3
+
+# Ignore Git files
+.git/
+.gitignore
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore VS Code settings
+.vscode/

@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AEGIS | Surveillance Command</title>
+    <script>
+        // Check if the user has a "key" (token) in their pocket
+        const token = localStorage.getItem('aegis_token');
+        
+        // If no key, kick them to the login page immediately
+        if (!token) {
+            console.warn("ACCESS DENIED: No credentials found.");
+            window.location.href = '/login';
+        }
+    </script>
     <!-- Radar Emoji Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
     <!-- Tailwind CSS -->
@@ -30,6 +40,11 @@
             <!-- Status (Cyan) -->
             <div>STATUS: <span class="text-[#45E3FF]">ONLINE</span></div>
             <div>AI MODEL: <span class="text-white">RESNET-CNN</span></div>
+    
+    <!-- LOGOUT BUTTON -->
+            <button onclick="logout()" class="ml-4 border border-[#FF7582] text-[#FF7582] text-xs px-3 py-1 rounded hover:bg-[#FF7582] hover:text-white transition-colors">
+                LOGOUT
+            </button>
         </div>
     </header>
 
