@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  aegis-core:
+    build: .
+    container_name: aegis_radar_system
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist the database file even if container restarts
+      - aegis_data:/app/db_storage
+    environment:
+      - MODULE_NAME=app.main
+    restart: always
+
+# Define a persistent volume for the database
+volumes:
+  aegis_data:

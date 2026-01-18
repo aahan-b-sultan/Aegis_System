@@ -12,10 +12,14 @@ class Settings(BaseSettings):
     
     # Paths
     BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    MODEL_PATH: str = os.path.join(BASE_DIR, "../ai_models/radar_model.h5")
-    LABEL_ENCODER_PATH: str = os.path.join(BASE_DIR, "../ai_models/label_encoder.pkl")
+    MODEL_PATH: str = os.path.join(BASE_DIR, "ai_models/radar_model.h5") # Adjusted path slightly for Docker safety
+    LABEL_ENCODER_PATH: str = os.path.join(BASE_DIR, "ai_models/label_encoder.pkl")
     
-    # Database
-    SQLALCHEMY_DATABASE_URI: str = "sqlite:///./aegis.db"
+    # Database Path Logic
+    # If inside Docker (we mapped /app/db_storage), use that. Else use local folder.
+    if os.path.exists("/app/db_storage"):
+        SQLALCHEMY_DATABASE_URI: str = "sqlite:////app/db_storage/aegis.db"
+    else:
+        SQLALCHEMY_DATABASE_URI: str = "sqlite:///./aegis.db"
 
 settings = Settings()
