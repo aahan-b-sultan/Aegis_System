@@ -7,6 +7,7 @@ from app.crud.scan import create_scan_log, get_recent_scans
 from fastapi.responses import StreamingResponse
 from app.services.report_generator import generate_pdf_report
 from app.models.scan import ScanLog
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -93,3 +94,53 @@ def download_report(scan_id: int, db: Session = Depends(get_db)):
         media_type="application/pdf",
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
+
+# --- FEEDBACK SYSTEM ---
+class FeedbackRequest(BaseModel):
+    scan_id: int
+    correct_label: str
+
+@router.put("/feedback")
+def submit_feedback(feedback: FeedbackRequest, db: Session = Depends(get_db)):
+    """
+    Updates a scan log with human verification.
+    """
+    log = db.query(ScanLog).filter(ScanLog.id == feedback.scan_id).first()
+    if not log:
+        raise HTTPException(status_code=404, detail="Log not found")
+    
+    log.user_verified = True
+    log.corrected_label = feedback.correct_label
+    db.commit()
+    return {"status": "verified"}
+
+# --- ANALYTICS SYSTEM ---
+@router.get("/stats")
+def get_stats(db: Session = Depends(get_db)):
+    """
+    Returns aggregated statistics for the dashboard charts.
+    """
+    logs = db.query(ScanLog).all()
+    
+    # Initialize counters
+    stats = {
+        "total": len(logs),
+        "threats": 0,
+        "class_counts": {"DRONE": 0, "CAR": 0, "HUMAN": 0, "UNKNOWN": 0}
+    }
+    
+    for log in logs:
+        # Count Threats
+        if log.is_threat:
+            stats["threats"] += 1
+            
+        # Count Classes (Use corrected label if available, else AI label)
+        label = log.corrected_label if log.user_verified else log.target_class
+        label = label.upper()
+        
+        if label in stats["class_counts"]:
+            stats["class_counts"][label] += 1
+        else:
+            stats["class_counts"]["UNKNOWN"] += 1
+            
+    return stats

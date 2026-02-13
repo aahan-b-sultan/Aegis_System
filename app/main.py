@@ -26,13 +26,21 @@ app.include_router(radar.router, prefix="/api/v1/radar", tags=["Radar Control"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(radar.router, prefix="/api/v1/radar", tags=["Radar Control"])
 
-@app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
 
+# 1. NEW ROOT ROUTE (Landing Page)
+@app.get("/", response_class=HTMLResponse)
+async def landing_page(request: Request):
+    return templates.TemplateResponse("welcome.html", {"request": request})
+
+# 2. LOGIN ROUTE (Already exists, ensure it's there)
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
+# 3. CHANGED DASHBOARD ROUTE (Now at /dashboard)
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard_page(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 if __name__ == "__main__":
     import uvicorn

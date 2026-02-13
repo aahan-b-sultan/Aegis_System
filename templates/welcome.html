@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS | System Overview</title>
+    <!-- Radar Icon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#0b0f19] text-slate-50 font-mono h-screen overflow-hidden flex flex-col relative">
+
+    <!-- CRT Effects -->
+    <div class="crt-overlay"></div>
+    <div class="scanline"></div>
+
+    <!-- Background Grid -->
+    <div class="absolute inset-0 radar-grid opacity-20 z-0"></div>
+
+    <!-- Main Content Container (Scrollable) -->
+    <div class="z-10 h-full overflow-y-auto scroll-smooth">
+        
+        <div class="container mx-auto px-6 py-20 min-h-screen flex flex-col justify-center">
+            
+            <!-- Hero Section -->
+            <div class="max-w-4xl">
+                <div class="flex items-center gap-4 mb-6 animate-slide-in">
+                    <span class="text-[#45E3FF] text-sm tracking-[0.3em] uppercase border border-[#45E3FF] px-3 py-1 rounded-full bg-[#45E3FF]/10">
+                        Defense Systems v2.0
+                    </span>
+                </div>
+
+                <h1 class="text-7xl font-bold mb-6 leading-tight animate-fade-in animate-delay-100">
+                    <span class="text-white">PROJECT</span> <span class="text-[#A163F7] drop-shadow-[0_0_15px_rgba(161,99,247,0.6)]">AEGIS</span>
+                </h1>
+                
+                <p class="text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed animate-fade-in animate-delay-200">
+                    A next-generation <strong class="text-white">Micro-Doppler Radar Classification System</strong>. 
+                    Utilizing <span class="text-[#6F88FC]">ResNet50 AI</span> and <span class="text-[#6F88FC]">FMCW Signal Processing</span> 
+                    to detect, classify, and track dynamic aerial threats in real-time.
+                </p>
+
+                <div class="flex gap-6 animate-fade-in animate-delay-300">
+                    <a href="/login" class="group relative px-8 py-4 bg-[#A163F7] text-white font-bold text-lg rounded overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(161,99,247,0.4)]">
+                        <span class="relative z-10">INITIALIZE SYSTEM</span>
+                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </a>
+                    
+                    <!-- THE BUTTON NOW WORKS -->
+                    <button onclick="scrollToFeatures()" class="px-8 py-4 border border-slate-600 text-slate-300 font-bold text-lg rounded hover:border-[#45E3FF] hover:text-[#45E3FF] transition-colors">
+                        SYSTEM ARCHITECTURE
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feature Grid (Target for Scrolling) -->
+            <!-- Added ID="features" so the button knows where to go -->
+            <div id="features" class="grid grid-cols-3 gap-6 mt-32 animate-fade-in animate-delay-300 pb-20">
+                <!-- Feature 1 -->
+                <div class="p-6 border border-slate-800 bg-[#1e293b]/50 rounded hover:border-[#6F88FC] transition-colors group">
+                    <div class="text-[#6F88FC] text-2xl mb-3 group-hover:scale-110 transition-transform origin-left">📡</div>
+                    <h3 class="text-white font-bold mb-2">Digital Twin Simulation</h3>
+                    <p class="text-sm text-slate-400">Virtual sensor driver streams raw I/Q data to mimic live hardware latency (<100ms).</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-6 border border-slate-800 bg-[#1e293b]/50 rounded hover:border-[#A163F7] transition-colors group">
+                    <div class="text-[#A163F7] text-2xl mb-3 group-hover:scale-110 transition-transform origin-left">🧠</div>
+                    <h3 class="text-white font-bold mb-2">ResNet50 Neural Net</h3>
+                    <p class="text-sm text-slate-400">Transfer learning architecture optimized for Micro-Doppler spectrogram texture analysis.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-6 border border-slate-800 bg-[#1e293b]/50 rounded hover:border-[#FF7582] transition-colors group">
+                    <div class="text-[#FF7582] text-2xl mb-3 group-hover:scale-110 transition-transform origin-left">🛡️</div>
+                    <h3 class="text-white font-bold mb-2">Active Defense</h3>
+                    <p class="text-sm text-slate-400">Automated threat logging, PDF reporting, and Human-in-the-Loop verification pipeline.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT TO MAKE IT WORK -->
+    <script>
+        function scrollToFeatures() {
+            const element = document.getElementById('features');
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

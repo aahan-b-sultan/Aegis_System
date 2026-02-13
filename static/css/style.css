@@ -5,7 +5,7 @@
     --safe: #45E3FF;      /* Cyan */
     --threat: #FF7582;    /* Red/Pink */
     
-    --bg-dark: #5196cb;
+    --bg-dark: #05080f;
     --panel-bg: #1e293b;
 }
 
@@ -50,4 +50,73 @@
         linear-gradient(rgba(69, 227, 255, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(69, 227, 255, 0.1) 1px, transparent 1px);
     background-size: 50px 50px;
+}
+
+/* --- ANIMATIONS & FX --- */
+
+/* 1. Smooth Transitions for everything */
+* {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+/* 2. Keyframe Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 5px var(--primary); }
+    50% { box-shadow: 0 0 20px var(--primary); }
+    100% { box-shadow: 0 0 5px var(--primary); }
+}
+
+@keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* 3. Utility Classes for HTML */
+.animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+.animate-slide-in { animation: slideInRight 0.5s ease-out forwards; }
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+
+/* 4. CRT Monitor Effect (The "Cool Factor") */
+.crt-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
+    pointer-events: none; /* Let clicks pass through */
+    z-index: 9999;
+    opacity: 0.3;
+}
+
+.scanline {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    animation: scanline 6s linear infinite;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+/* 5. Glassmorphism for Modals */
+.glass-panel {
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(161, 99, 247, 0.3);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* 6. Button Hover Upgrades */
+.btn-control:hover {
+    transform: translateX(5px); /* Slide slightly right on hover */
 }

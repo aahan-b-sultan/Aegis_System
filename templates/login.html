@@ -56,7 +56,7 @@
                     // Save Token to LocalStorage
                     localStorage.setItem('aegis_token', data.access_token);
                     // Redirect to Dashboard
-                    window.location.href = '/';
+                    window.location.href = '/dashboard';
                 } else {
                     errorDiv.innerText = "ACCESS DENIED: Invalid Credentials";
                 }
