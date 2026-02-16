@@ -225,20 +225,44 @@
     </div>
 
     <!-- 3. FEEDBACK VERIFICATION MODAL -->
-    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur hidden items-center justify-center z-[60]">
-        <div class="bg-[glass-panel w-3/4 h-3/4 rounded-lg flex flex-col] border border-[#A163F7] p-6 rounded-lg shadow-2xl w-96 text-center">
-            <h3 class="text-white font-bold text-lg mb-4">VERIFY CLASSIFICATION</h3>
-            <p class="text-slate-400 text-xs mb-6">Select the actual ground truth for this signal:</p>
+    <!-- Added 'onclick' to the background wrapper to detect outside clicks -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black/90 backdrop-blur hidden items-center justify-center z-[60]" onclick="closeFeedbackOutside(event)">
+        
+        <!-- Inner Panel: Made wider (max-w-md) and added glass effect -->
+        <div class="glass-panel w-full max-w-md p-6 rounded-xl shadow-[0_0_50px_rgba(161,99,247,0.15)] relative transform transition-all" onclick="event.stopPropagation()">
+            
+            <!-- Header with Close Button -->
+            <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
+                <h3 class="text-[#A163F7] font-bold text-lg tracking-widest">VERIFY CLASSIFICATION</h3>
+                <button onclick="closeFeedback()" class="text-slate-500 hover:text-white text-2xl font-bold px-2 transition-colors">&times;</button>
+            </div>
+
+            <p class="text-slate-300 text-sm mb-6 text-center">
+                Select the actual ground truth for Scan <span id="display-scan-id" class="font-mono text-[#6F88FC]">#---</span>:
+            </p>
             
             <input type="hidden" id="feedback-scan-id">
             
-            <div class="grid grid-cols-1 gap-2">
-                <button onclick="submitCorrection('DRONE')" class="p-3 border border-[#FF7582] text-[#FF7582] hover:bg-[#FF7582] hover:text-white rounded transition-colors font-mono font-bold">DRONE (THREAT)</button>
-                <button onclick="submitCorrection('CAR')" class="p-3 border border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-white rounded transition-colors font-mono font-bold">CAR (VEHICLE)</button>
-                <button onclick="submitCorrection('HUMAN')" class="p-3 border border-[#45E3FF] text-[#45E3FF] hover:bg-[#45E3FF] hover:text-white rounded transition-colors font-mono font-bold">HUMAN (NEUTRAL)</button>
+            <!-- Buttons: Vertical Stack, Full Width, Better Spacing -->
+            <div class="flex flex-col gap-3">
+                <button onclick="submitCorrection('DRONE')" class="group relative w-full p-4 border border-[#FF7582] bg-[#FF7582]/5 hover:bg-[#FF7582] rounded transition-all duration-200">
+                    <span class="font-mono font-bold text-[#FF7582] group-hover:text-white tracking-widest uppercase">Drone (Threat)</span>
+                </button>
+                
+                <button onclick="submitCorrection('CAR')" class="group relative w-full p-4 border border-[#F59E0B] bg-[#F59E0B]/5 hover:bg-[#F59E0B] rounded transition-all duration-200">
+                    <span class="font-mono font-bold text-[#F59E0B] group-hover:text-white tracking-widest uppercase">Car (Vehicle)</span>
+                </button>
+                
+                <button onclick="submitCorrection('HUMAN')" class="group relative w-full p-4 border border-[#45E3FF] bg-[#45E3FF]/5 hover:bg-[#45E3FF] rounded transition-all duration-200">
+                    <span class="font-mono font-bold text-[#45E3FF] group-hover:text-white tracking-widest uppercase">Human (Neutral)</span>
+                </button>
             </div>
             
-            <button onclick="document.getElementById('feedback-modal').classList.add('hidden')" class="mt-6 text-xs text-slate-500 hover:text-white underline">CANCEL</button>
+            <div class="mt-6 text-center">
+                <button onclick="closeFeedback()" class="text-xs text-slate-500 hover:text-slate-300 underline transition-colors">
+                    CANCEL / CLOSE
+                </button>
+            </div>
         </div>
     </div>
 

@@ -177,13 +177,23 @@ if (uploadInput) {
 // --- HISTORY MODAL LOGIC ---
 function toggleHistory(show) {
     const modal = document.getElementById('history-modal');
+    // Select the inner glass panel (first child)
+    const panel = modal.firstElementChild; 
+
     if (show) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        
+        // Add Animation
+        panel.classList.add('modal-animate');
+        
         loadHistoryData();
     } else {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        
+        // Reset Animation so it can play again next time
+        panel.classList.remove('modal-animate');
     }
 }
 
@@ -238,8 +248,36 @@ async function loadHistoryData() {
 
 function openFeedback(id) {
     document.getElementById('feedback-scan-id').value = id;
-    document.getElementById('feedback-modal').classList.remove('hidden');
-    document.getElementById('feedback-modal').classList.add('flex');
+    document.getElementById('display-scan-id').innerText = "#" + id; // Show ID to user
+    
+    const modal = document.getElementById('feedback-modal');
+    const panel = modal.firstElementChild; // The inner glass panel
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    panel.classList.add('modal-animate'); // Trigger pop-in animation
+}
+
+// Function to close the modal
+function closeFeedback() {
+    const modal = document.getElementById('feedback-modal');
+    const panel = modal.firstElementChild;
+    
+    // Remove animation class
+    panel.classList.remove('modal-animate');
+    
+    // Hide modal
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+// Function to close when clicking the black background
+function closeFeedbackOutside(event) {
+    // If the click target IS the background wrapper (id="feedback-modal"), close it.
+    // (We prevented bubbling on the inner panel using event.stopPropagation() in HTML)
+    if (event.target.id === 'feedback-modal') {
+        closeFeedback();
+    }
 }
 
 async function submitCorrection(label) {
@@ -250,21 +288,28 @@ async function submitCorrection(label) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ scan_id: id, correct_label: label })
         });
-        document.getElementById('feedback-modal').classList.add('hidden');
-        document.getElementById('feedback-modal').classList.remove('flex');
-        loadHistoryData(); 
-    } catch(e) { alert("Error saving feedback"); }
+        
+        closeFeedback(); // Close modal on success
+        loadHistoryData(); // Refresh table
+    } catch(e) { 
+        alert("Error saving feedback"); 
+    }
 }
+
 
 function toggleAnalytics(show) {
     const modal = document.getElementById('analytics-modal');
+    const panel = modal.firstElementChild;
+
     if (show) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        panel.classList.add('modal-animate'); // Animation
         loadAnalytics();
     } else {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        panel.classList.remove('modal-animate');
     }
 }
 

@@ -54,9 +54,14 @@
 
 /* --- ANIMATIONS & FX --- */
 
-/* 1. Smooth Transitions for everything */
+/* 1. Smooth Transitions */
 * {
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+/* Apply transform transition ONLY to interactive buttons/links */
+button, .btn-control, a {
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 /* 2. Keyframe Animations */
@@ -119,4 +124,27 @@
 /* 6. Button Hover Upgrades */
 .btn-control:hover {
     transform: translateX(5px); /* Slide slightly right on hover */
+}
+
+/* --- MODAL ANIMATIONS --- */
+
+@keyframes modalPop {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.95) translateY(10px); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1) translateY(0); 
+    }
+}
+
+/* We will add this class via JavaScript */
+.modal-animate {
+    animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Fix Plotly Tooltip Z-Index */
+.hoverlayer {
+    z-index: 9999 !important;
 }
