@@ -5,15 +5,17 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Map a specific volume for the database so logs persist
-      - aegis_db_data:/app/db_storage
+      # Map the app code
+      - .:/app
+      # Map the AI Models so the backend can load them
+      - ./ai_models:/app/ai_models
+      # Map the Data Lake so the radar can read CSVs
+      - ./data_lake:/app/data_lake
+      # Map the database so logs aren't lost when Docker stops
+      - ./aegis.db:/app/aegis.db
     environment:
-      - MODULE_NAME=app.main
+      # Tell Python not to generate .pyc files (keeps it clean)
+      - PYTHONDONTWRITEBYTECODE=1
+      # Ensure logs appear in real-time
+      - PYTHONUNBUFFERED=1
     restart: always
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-
-# Define the volume for persistence
-volumes:
-  aegis_db_data:

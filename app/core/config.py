@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     # Inside Docker, we map a volume to /app/db_storage
     if os.path.exists("/app/db_storage"):
         # We are in Docker
-        SQLALCHEMY_DATABASE_URI: str = "sqlite:////app/db_storage/aegis.db"
+        SQLALCHEMY_DATABASE_URI: str = "sqlite:////app/aegis.db"
     else:
         # We are on local laptop
         SQLALCHEMY_DATABASE_URI: str = f"sqlite:///{os.path.join(BASE_DIR, 'aegis.db')}"
