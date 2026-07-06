@@ -1,5 +1,5 @@
 let isScanning = false;
-let scanInterval = null;
+let scanTimeout = null;
 
 // Initialize Plotly Heatmap
 const layout = {
@@ -69,7 +69,7 @@ async function loadRandom() {
 // --- RADAR CONTROL ---
 
 function toggleRadar(active) {
-    if (scanInterval) clearInterval(scanInterval); 
+    if (scanTimeout) clearTimeout(scanTimeout); 
 
     isScanning = active;
     document.getElementById('btn-start').disabled = active;
@@ -77,14 +77,15 @@ function toggleRadar(active) {
     
     if (active) {
         addLog("Radar: Scan Sequence Initiated.");
-        scanInterval = setInterval(fetchFrame, 250); 
+        fetchFrame(); 
     } else {
         addLog("Radar: Sequence Halted.");
-        clearInterval(scanInterval);
     }
 }
 
 async function fetchFrame() {
+    if (!isScanning) return;
+    
     const start = performance.now();
     try {
         const res = await fetch('/api/v1/radar/scan');
@@ -109,6 +110,11 @@ async function fetchFrame() {
         console.error(e);
         toggleRadar(false); 
         addLog("Error: Signal Lost. " + e.message, true);
+        return; // Stop polling on error
+    }
+
+    if (isScanning) {
+        scanTimeout = setTimeout(fetchFrame, 250);
     }
 }
 

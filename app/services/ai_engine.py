@@ -34,22 +34,26 @@ class AIEngine:
         else:
             print("⚠️ [AI ENGINE] Model files not found.")
 
+    @tf.function(reduce_retracing=True)
+    def _tf_predict(self, matrix_norm):
+        # 1. Add channel dimension
+        tensor = tf.expand_dims(matrix_norm, axis=-1)
+        # 2. Resize to 224x224
+        tensor = tf.image.resize(tensor, (224, 224))
+        # 3. Convert Grayscale to RGB
+        tensor_rgb = tf.image.grayscale_to_rgb(tensor)
+        # 4. Add Batch Dimension
+        input_tensor = tf.expand_dims(tensor_rgb, axis=0)
+        # 5. Inference
+        return self.model(input_tensor, training=False)
+
     def predict(self, matrix_norm):
         if self.model is None:
             return {"label": "SYSTEM_OFFLINE", "confidence": 0.0, "is_threat": False}
 
-        # 1. Resize to 224x224 (ResNet Standard)
-        tensor = tf.image.resize(matrix_norm[..., np.newaxis], (224, 224))
-        
-        # 2. Convert Grayscale to RGB
-        tensor_rgb = tf.image.grayscale_to_rgb(tensor)
-        
-        # 3. Add Batch Dimension
-        input_tensor = np.expand_dims(tensor_rgb, axis=0)
-
-        # 4. Inference
         try:
-            preds = self.model.predict(input_tensor, verbose=0) # verbose=0 hides log spam
+            # Execute compiled graph
+            preds = self._tf_predict(matrix_norm).numpy()
             
             # --- SMOOTHING LOGIC ---
             # Add current probabilities to buffer
